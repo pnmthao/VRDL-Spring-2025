@@ -15,9 +15,17 @@ In this homework, I implemented and optimized the SE-ResNeXt-aa101d_32x8d archit
 
 #### Installation & Dependencies
 Ensure you have Python 3.9+ installed. Install the required dependencies:
-
+- **Python**: 3.9.21
+- **NumPy**: 2.0.2
+- **Pandas**: 2.2.3
+- **PyTorch**: 2.5.1+cu124
+- **Torchvision**: 0.20.1+cu124
+- **Transformers**: 4.49.0
+- **Datasets**: 3.2.0
+- **Evaluate**: 0.4.3
+- **Timm**: 1.0.15
 ```bash
-pip install timm transformers datasets torch torchvision evaluate tqdm pandas numpy
+pip install timm transformers datasets torch torchvision evaluate tqdm pandas numpy timm
 ```
 #### Dataset Structure
 The dataset should be placed in the data/ directory and follow the ImageFolder format:
@@ -41,15 +49,6 @@ The following dependencies and hardware configurations are used in this project:
 - **CPU**: 48 Cores
 - **OS**: Ubuntu 20.04.6 LTS
 
-#### Software & Dependencies
-- **Python**: 3.9.21
-- **NumPy**: 2.0.2
-- **Pandas**: 2.2.3
-- **PyTorch**: 2.5.1+cu124
-- **Torchvision**: 0.20.1+cu124
-- **Transformers**: 4.49.0
-- **Datasets**: 3.2.0
-- **Evaluate**: 0.4.3
 
 ### Data Augmentation Pipelines
 
