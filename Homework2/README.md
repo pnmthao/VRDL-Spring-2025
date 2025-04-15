@@ -10,20 +10,18 @@ This project implements a digit detection and counting system using the **Faster
 
 ### Problem Statement
 
-Given an image that may contain multiple digits, the goal is twofold:
+Given an image that may contain multiple digits, the goal is two-fold:
 
-1. **Digit Detection** (Task 1): Predict bounding boxes and digit class labels.
-2. **Digit Counting** (Task 2): Predict the total number of digits in each image by aggregating detections.
+1. **Task1**: The class and bounding box of each digit in the image
+2. **Task2**: The number of detected digits in the image
 
 The model must solve these tasks solely using the Faster R-CNN framework. No external datasets or pretrained digit-specific models are allowed.
 
 ### Key Features
 
-- **Digit Detection (Task 1):**
-  - Predict bounding boxes and classes (0–9) for digits in images.
+- **Task1**: The class and bounding box of each digit in the image
 
-- **Digit Counting (Task 2):**
-  - Predict how many digits appear in each image by filtering and sorting detections.
+- **Task2**: The number of detected digits in the image
 
 - **Backbone: ResNet-50 v2 + FPN**
   - Extracts multi-scale features using a deep residual network.
@@ -44,14 +42,11 @@ The model architecture follows this pipeline:
 
 **Input Image → ResNet-50 v2 + FPN → Region Proposal Network (RPN) → RoI Pooling → Classification & Regression**
 
-
 ## Model Details
 
 ### Backbone: ResNet-50 v2 + FPN
 
-We use the improved ResNet-50 v2 variant, which reorders BatchNorm and activation layers for better convergence. This is combined with a **Feature Pyramid Network (FPN)** to capture multi-scale features, making it particularly effective for small or overlapping digits.
-
-Key benefits:
+We use the improved ResNet-50 v2 variant, which reorders BatchNorm and activation layers for better convergence. This is combined with a **Feature Pyramid Network (FPN)** to capture multi-scale features, making it particularly effective for small or overlapping digits. Key benefits:
 - Deep residual features
 - Multi-scale feature representation via FPN
 - Pretrained on ImageNet for fast convergence
@@ -68,13 +63,15 @@ Key benefits:
 
 ## Project Structure
 
+```bash
+Homework2/
 ├── 413540004.py # Training script
 ├── 413540004_submission.py # Inference and submission script
 ├── pred.csv # Digit string predictions
 ├── pred.json # Bounding box predictions (COCO format)
 ├── results/ # TensorBoard logs & saved models
 ├── tensorboard/ # TensorBoard logs
-
+```
 ## Dataset
 
 - Format: COCO-style annotations (`train.json`, `valid.json`)
@@ -84,12 +81,6 @@ Key benefits:
   - Validation: 3,340 images
   - Test: 13,068 images
 
-
-## Installation
-
-```bash
-pip install torch torchvision pycocotools pandas pillow tqdm tensorboard
-```
 
 ### How to install
 
@@ -106,10 +97,6 @@ Ensure you have Python 3.9+ installed. Install the required dependencies:
 - **Timm**: 1.0.15
 - **Pycocotools**==2.0.8
 - **Pillow**==11.1.0
-
-```bash
-pip install timm transformers datasets torch torchvision evaluate tqdm pandas numpy pycocotools pillow
-```
 
 #### Environmental Settings
 
