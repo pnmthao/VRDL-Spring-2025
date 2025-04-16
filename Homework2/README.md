@@ -118,7 +118,7 @@ This project includes two main Python scripts:
 #### Training the Model
 
 ```bash
-python 413540004.py -e 20 -l 0.001 -m Resnet50_v2 -b 6
+python 413540004.py -e 10 -l 0.001 -m Resnet50_v2 -b 6
 ```
 
 #### Inference & Submission
