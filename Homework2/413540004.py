@@ -23,7 +23,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-e', "--epochs", type=int, default=20)
+parser.add_argument('-e', "--epochs", type=int, default=10)
 parser.add_argument('-l', "--lr", type=float, default=0.001)
 parser.add_argument('-m', "--model_name", type=str, default="Resnet50_v2")
 parser.add_argument('-w', "--model_weight", type=str, default="")
@@ -198,10 +198,10 @@ transform = T.Compose([
 ])
 
 batch_size = args.batch_size
-train_dataset = DigitCocoDataset('../nycu-hw2-data/train/',
-                                 '../nycu-hw2-data/train.json', transform=transform)
-valid_dataset = DigitCocoDataset('../nycu-hw2-data/valid/',
-                                 '../nycu-hw2-data/valid.json', transform=transform)
+train_dataset = DigitCocoDataset('nycu-hw2-data/train/',
+                                 'nycu-hw2-data/train.json', transform=transform)
+valid_dataset = DigitCocoDataset('nycu-hw2-data/valid/',
+                                 'nycu-hw2-data/valid.json', transform=transform)
 
 train_loader = DataLoader(train_dataset, batch_size=batch_size,
                           shuffle=True, num_workers=2, collate_fn=collate_fn)
@@ -257,7 +257,7 @@ os.system(f"cp 413540004.py {result_dir}/")  # backup code
 writer = SummaryWriter(
     log_dir=f"tensorboard/{datestr}_{result_dir.split('/')[1]}")
 
-coco_gt = COCO("../nycu-hw2-data/valid.json")
+coco_gt = COCO("nycu-hw2-data/valid.json")
 thresh = 0.5
 best_val_map, best_epoch = -1, -1
 num_steps, step = 500, 0
