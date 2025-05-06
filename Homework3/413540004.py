@@ -31,7 +31,7 @@ DatasetCatalog.register("dataset_train", lambda: load_data())
 
 
 def load_data():
-    with open('hw3-data/train_annot.json', 'r') as f:
+    with open('hw3-data/train.json', 'r') as f:
         data = json.load(f)
     return data
 

@@ -4,12 +4,15 @@ import numpy as np
 from glob import glob
 import skimage.io as sio
 from pycocotools import mask as mask_util
+from detectron2.data import detection_utils
 
 annotations = []
 
 for idx, folder_name in enumerate(glob(f"hw3-data/train/*")):
     img_path = f"{folder_name}/image.tif"
-    img_height, img_width, _ = cv2.imread(img_path).shape
+    image = detection_utils.read_image(img_path, format='BGR')
+    img_height, img_width = image.shape[:2]
+    del image  # delete since just getting the image dimension only
 
     img_annot = []
     for ins_path in glob(f"{folder_name}/class*.tif"):
@@ -37,5 +40,6 @@ for idx, folder_name in enumerate(glob(f"hw3-data/train/*")):
         'annotations': img_annot
     })
 
-with open(f'hw3-data/train__annot.json', 'w') as f:
+
+with open(f'hw3-data/train.json', 'w') as f:
     json.dump(annotations, f)

@@ -1,5 +1,4 @@
 import os
-import cv2
 import json
 import argparse
 import numpy as np
@@ -9,6 +8,7 @@ from tqdm.auto import tqdm
 import pycocotools.mask as mask_util
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
+from detectron2.data import detection_utils
 
 parser = argparse.ArgumentParser()
 
@@ -36,19 +36,24 @@ datestr = f"{datetime.now().strftime('%Y%m%d__%H%M%S')}"
 
 for img in tqdm(dataset_dict):
     id = img["id"]
-    im = cv2.imread(f"hw3-data/test_release/{img['file_name']}")
+    im = detection_utils.read_image(
+        f"hw3-data/test_release/{img['file_name']}", format='BGR')
     outputs = predictor(im)
     instances = outputs["instances"].to("cpu")
     instance_num = len(instances)
     total_instances.append(instance_num)
+
+    # Get prediction results: class labels, bounding boxes, masks, scores
     categories = instances.pred_classes
     boxes = instances.pred_boxes
     masks = instances.pred_masks
     scores = instances.scores
 
-    # RLE
+    # Encode binary masks into RLE format
     instances.pred_masks_rle = [
         mask_util.encode(np.asfortranarray(mask)) for mask in masks]
+
+    # Decode 'counts'
     for rle in instances.pred_masks_rle:
         rle['counts'] = rle['counts'].decode('utf-8')
 
@@ -59,8 +64,9 @@ for img in tqdm(dataset_dict):
         pred['image_id'] = id
         bbox = instances.pred_boxes[i].tensor.numpy().tolist()[0]
         pred['bbox'] = bbox
-        pred['score'] = float(scores[i])
+        pred['score'] = float(scores[i])  # Confidence score
         pred['category_id'] = int(categories[i])
+        # RLE-encoded segmentation
         pred['segmentation'] = instances.pred_masks_rle[i]
         prediction.append(pred)
 
