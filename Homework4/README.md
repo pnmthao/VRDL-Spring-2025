@@ -24,32 +24,43 @@ Ensure you have Python 3.9+ installed. Install the required dependencies:
 ### Model Details
 
 The PromptIR model is composed of the following components:
-- Overlap Patch Embedding: Extracts low-level features from input.
+- Overlap Patch Embedding: Extracts low-level features from input images.
 - Hierarchical Transformer Encoder: Multi-scale attention for feature extraction.
-- PromptGen Modules: Learn task-aware prompts that guide each decoding stage.
+- PromptGen Modules: Dynamically generate degradation-aware prompts to condition the decoder.
 - Hierarchical Decoder: Reconstructs clean images from latent features.
-- Refinement Module: Final output enhancement using Transformer blocks.
+- Refinement Module: Applies final enhancements for image quality.
 
 ### Data Preparation
 
 #### Input Format
 
-Training data is organized in:
+Training and testing data should be organized as follows:
 
 ```bash
 hw4-data/
 ├── train/
 │   ├── degraded/
-│   │   ├── rain-000.png
-│   │   ├── snow-001.png
+│   │   ├── rain-1.png
+│   │   ├── ...
+│   │   ├── rain-1600.png
+│   │   ├── snow-1.png
+│   │   ├── ...
+│   │   ├── snow-1600.png
 │   ├── clean/
-│   │   ├── rain_clean-000.png
-│   │   ├── snow_clean-001.png
+│   │   ├── rain_clean-1.png
+│   │   ├── ...
+│   │   ├── rain_clean-1600.png
+│   │   ├── snow_clean-1.png
+│   │   ├── ...
+│   │   ├── snow_clean-1600.png
 ├── test/
 │   └── degraded/
-│       ├── rain-100.png
-│       ├── snow-200.png
+│       ├── 0.png
+│       ├── ...
+│       ├── 99.png
 ```
+The test images are named generically (e.g., 0.png to 99.png) and do not reveal the type of degradation.
+
 **Note**:
 
 - Training set uses ```bash degraded/``` and corresponding ```bash clean/``` images.
@@ -72,20 +83,18 @@ python 413540004.py \
   --ckpt_dir train_ckpt
 ```
 
-- Checkpoints are saved in ```bash train_ckpt/```
-- Logs are saved to ```bash logs/``` for TensorBoard visualization
+- Checkpoints will be saved in: ```bash train_ckpt/```
+- TensorBoard logs will be saved in: ```bash logs/```
 
 ### Evaluation
 
-After training, use the validation set performance to evaluate the model:
-
-Validation results include:
+The model logs the following metrics on the validation set:
 
 - PSNR (Peak Signal-to-Noise Ratio)
 - SSIM Loss
 - Total Loss (L1 + SSIM)
 
-These are automatically logged using ```bash LightningModule.log```.
+These are recorded automatically using ```bash LightningModule.log```.
 
 ### Submission
 
@@ -103,9 +112,9 @@ Outputs:
 
 - Restored images saved in ```bash output/```
 
-- ```bash pred.npz``` file containing test images in ```bash .npz``` format
+- ```bash pred.npz``` containing output tensors
 
-- Zipped version: ```bash output/YYYYMMDD__HHMMSS.zip```
+- A timestamped ZIP archive: ```bash output/YYYYMMDD__HHMMSS.zip```
 
 ### Performance snapshot
 ![alt text](snapshot.png)
@@ -113,3 +122,7 @@ Outputs:
 ### Acknowledgements
 
 This project is based on the [PromptIR](https://github.com/va1shn9v/PromptIR)  architecture from the original paper. We thank the authors for their insightful work.
+
+###  Reference
+
+Potlapalli, V., Zamir, S. W., Khan, S. H., & Shahbaz Khan, F. (2023). Promptir: Prompting for all-in-one image restoration. Advances in Neural Information Processing Systems, 36, 71275-71293.
