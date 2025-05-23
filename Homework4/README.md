@@ -24,11 +24,13 @@ Ensure you have Python 3.9+ installed. Install the required dependencies:
 ### Model Details
 
 The PromptIR model is composed of the following components:
+
 - Overlap Patch Embedding: Extracts low-level features from input images.
 - Hierarchical Transformer Encoder: Multi-scale attention for feature extraction.
 - PromptGen Modules: Dynamically generate degradation-aware prompts to condition the decoder.
 - Hierarchical Decoder: Reconstructs clean images from latent features.
 - Refinement Module: Applies final enhancements for image quality.
+- Loss function: $total\_loss = L1\_loss + 0.1 * ssim\_loss$
 
 ### Data Preparation
 
@@ -63,10 +65,10 @@ The test images are named generically (e.g., 0.png to 99.png) and do not reveal 
 
 **Note**:
 
-- Training set uses ```bash degraded/``` and corresponding ```bash clean/``` images.
+- Training set uses ```degraded/``` and corresponding ```clean/``` images.
 - Filenames must follow the pattern:
-```bash rain-xxx.png``` → ```bash rain_clean-xxx.png```
-```bash snow-xxx.png``` → ```bash snow_clean-xxx.png```
+```rain-xxx.png``` → ```rain_clean-xxx.png```
+```snow-xxx.png``` → ```snow_clean-xxx.png```
 
 ### Training
 
@@ -83,8 +85,8 @@ python 413540004.py \
   --ckpt_dir train_ckpt
 ```
 
-- Checkpoints will be saved in: ```bash train_ckpt/```
-- TensorBoard logs will be saved in: ```bash logs/```
+- Checkpoints will be saved in: ```train_ckpt/```
+- TensorBoard logs will be saved in: ```logs/```
 
 ### Evaluation
 
@@ -93,8 +95,6 @@ The model logs the following metrics on the validation set:
 - PSNR (Peak Signal-to-Noise Ratio)
 - SSIM Loss
 - Total Loss (L1 + SSIM)
-
-These are recorded automatically using ```bash LightningModule.log```.
 
 ### Submission
 
@@ -105,16 +105,8 @@ python 413540004_submission.py \
   --test_path hw4-data/test/degraded/ \
   --output_path output \
   --ckpt_dir train_ckpt \
-  --ckpt_name model.ckpt
+  --ckpt_name best_model.ckpt
 ```
-
-Outputs:
-
-- Restored images saved in ```bash output/```
-
-- ```bash pred.npz``` containing output tensors
-
-- A timestamped ZIP archive: ```bash output/YYYYMMDD__HHMMSS.zip```
 
 ### Performance snapshot
 ![alt text](snapshot.png)
